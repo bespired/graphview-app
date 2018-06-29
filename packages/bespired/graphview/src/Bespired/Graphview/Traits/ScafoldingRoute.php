@@ -48,6 +48,9 @@ trait ScafoldingRoute {
 				"_/find/{type}/like/{property}/{search}/with/{node1}/{node2?}/{node3?}",
 				"findNodeLike",
 			], [
+				"_/find/{type}/like/{property}/{search}/with-all",
+				"findAll",
+			], [
 				"_/set/token/{token}",
 				"setNode",
 			], [
@@ -61,9 +64,13 @@ trait ScafoldingRoute {
 
 		$laravel_routes = $this->routing($routes, $gets);
 
-		file_put_contents($this->routePath('graph.php'), $this->routeFiller($laravel_routes));
+		file_put_contents($this->routePath('graphview.php'), $this->routeFiller($laravel_routes));
 
-		dd($this->routePath('graph.php'));
+		$web = file_get_contents($this->routePath('web.php'));
+		if (strpos($web, 'graphview.php') === false) {
+			$web = $web . "\n\n" . '@include_once "graphview.php";' . "\n";
+			file_put_contents($this->routePath('web.php'), $web);
+		}
 
 	}
 

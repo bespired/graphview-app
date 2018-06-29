@@ -2,7 +2,7 @@
 
 Route::get('_/set/postdata', function () {
 
-	for ($i = 0; $i < 1000; $i++) {
+	for ($i = 0; $i < 100; $i++) {
 		$state = strtoupper(str_random(3));
 		$fistname = array_random(config('graph.names.firstname'));
 		$lastname = array_random(config('graph.names.lastname'));
@@ -17,10 +17,11 @@ Route::get('_/set/postdata', function () {
 				"key" => "abc-123",
 				"token" => "456-def",
 			],
-			"persons" => [
+			"big_persons" => [
 				[
 					'firstname' => $fistname . 'ia',
 					'lastname' => $lastname . 'son',
+					'email' => str_replace(' ', '', strtolower($lastname)) . '@mailinator.com',
 				], [
 					'firstname' => $fistname,
 					'lastname' => $lastname,
@@ -29,7 +30,7 @@ Route::get('_/set/postdata', function () {
 					'birthday' => \Carbon\Carbon::createFromTimestampUTC(rand(3170040, 918318840))->toDateTimeString(),
 					'email' => str_replace(' ', '', strtolower($fistname . '.' . $lastname)) . '@mailinator.com',
 					'created_by' => 'demodata',
-					"addresses" => [
+					"full_addresses" => [
 						[
 							"tag" => "primary",
 							'address' => $streetname . array_random(['street', 'lane', 'path']) . ' ' . rand(4, 400),
@@ -52,7 +53,7 @@ Route::get('_/set/postdata', function () {
 						'created_by' => 'demodata',
 						'employee_count' => array_random([3, 10, 30, 50, 75, 100, 200, 500]),
 						'name' => $name . array_random([' Co.', ' Ltd.', ' B.v.']),
-						"address" => [
+						"full_address" => [
 							"tag" => "company",
 							'address' => $streetname . array_random(['street', 'lane', 'path']) . ' ' . rand(4, 400),
 							'city' => $city,

@@ -1,7 +1,6 @@
 import Shape  from '@Classes/Shape.js';
 import Hover  from '@Classes/Hover.js';
 import Move   from '@Classes/Move.js';
-import Plural from '@Classes/Plural.js';
 
 
 export default class Constant {
@@ -43,7 +42,7 @@ export default class Constant {
         constants.shape  = new Shape();
         constants.hover  = new Hover();
         constants.move   = new Move();
-        constants.plural = new Plural();
+        constants.plural = global.pluralize;
 
         constants.getScroll= function(){
             if (window.pageYOffset!= undefined) {

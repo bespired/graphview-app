@@ -9,7 +9,7 @@ class GraphController extends Controller {
 	public function getNode($type, $suid, $node1 = null, $node2 = null, $node3 = null) {
 
 		$withs = not_nulls([$node1, $node2, $node3]);
-		$Class = '\\App\\Models\\' . ucFirst(camel_case($type));
+		$Class = '\\App\\Models\\' . ucFirst(camel_case(str_singular($type)));
 		return $Class::whereSuid($suid)
 			->with($withs)
 			->first();
@@ -23,20 +23,37 @@ class GraphController extends Controller {
 		return 'todo';
 	}
 
-	public function findNode($type, $property, $search, $node1 = null, $node2 = null, $node3 = null) {
-
+	public function getNodeBy($type, $property, $search, $node1 = null, $node2 = null, $node3 = null) {
 		$withs = not_nulls([$node1, $node2, $node3]);
-		$Class = '\\App\\Models\\' . ucFirst(camel_case($type));
+		$Class = '\\App\\Models\\' . ucFirst(camel_case(str_singular($type)));
 		return $Class::where($property, $search)
 			->with($withs)
 			->get();
+	}
 
+	public function findNode($type, $property, $search, $node1 = null, $node2 = null, $node3 = null) {
+		$withs = not_nulls([$node1, $node2, $node3]);
+		$Class = '\\App\\Models\\' . ucFirst(camel_case(str_singular($type)));
+		return $Class::where($property, $search)
+			->with($withs)
+			->get();
 	}
 
 	public function findNodeLike($type, $property, $search, $node1 = null, $node2 = null, $node3 = null) {
 
 		$withs = not_nulls([$node1, $node2, $node3]);
-		$Class = '\\App\\Models\\' . ucFirst(camel_case($type));
+		$Class = '\\App\\Models\\' . ucFirst(camel_case(str_singular($type)));
+		return $Class::where($property, 'like', '%' . $search . '%')
+			->with($withs)
+			->get();
+
+	}
+
+	public function findAll($type, $property, $search) {
+
+		$withs = explode(',', config('model.with-all.' . str_name($type)));
+
+		$Class = '\\App\\Models\\' . ucFirst(camel_case(str_singular($type)));
 		return $Class::where($property, 'like', '%' . $search . '%')
 			->with($withs)
 			->get();

@@ -45,4 +45,39 @@
             background-color: #e5f2ef;
         }
     }
+    .create input{
+        width: 77%;
+        font-size: 1em;
+        margin-left: -6px;
+        margin-top: -4px;
+        padding: 1px 4px;
+    }
+
+    .prop, .key, .create{
+        padding: 2px 8px;
+    }
+
+    .icon {
+        margin: 0 -1px;
+        &:hover{
+            background-color: $primaryback;
+        }
+        &.right{
+            float: right;
+            visibility: hidden;
+        }
+    }
+
+    .prop:hover .icon, .key:hover .icon {
+        border: 1px solid #8BC34A;
+        visibility: visible;
+    }
+
+    .create i,.icon {
+        margin: 0 -1px;
+        cursor: pointer;
+        border: 1px solid white;
+        border-radius: 4px;
+    }
+
 }

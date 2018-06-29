@@ -53,10 +53,10 @@ class PostHandler {
 		// write pivots.
 		self::sync();
 
-		dd(self::$nodes);
+//		dd(self::$nodes);
 
 		// done.
-		// dump(self::$nodes);
+		dump(self::$nodes);
 	}
 
 	private static function flatten($data) {

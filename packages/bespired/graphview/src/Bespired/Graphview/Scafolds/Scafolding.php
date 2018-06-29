@@ -38,7 +38,7 @@ class Scafolding {
 		$this->writeConfig();
 
 		// write controllers
-		//		$this->writeControllers();
+		// $this->writeControllers();
 
 		// write routes
 		$this->writeRoutes();
@@ -46,7 +46,7 @@ class Scafolding {
 		// fix VerifyCsrfToken.php
 
 		// save creation data for the next time
-		// $this->saveScafolding();
+		$this->saveScafolding();
 
 	}
 
@@ -71,7 +71,6 @@ class Scafolding {
 		}
 
 		$this->saveRoutes($types);
-		dd($routes, $types);
 
 	}
 
@@ -94,17 +93,28 @@ class Scafolding {
 
 	private function writeNodes() {
 
+		// model new properties
 		foreach ($this->build->schema->nodes as $node) {
 			$filename = $this->migrationPath($this->migrationNameForNode($node));
-			$filedata = $this->migrationNodeFile($node);
-			file_put_contents($filename, $filedata);
-			echo ($filename) . "<br>";
+
+			if ($filedata = $this->migrationNodeRename($node)) {
+				file_put_contents($filename, $filedata);
+				echo ($filename) . "<br>";
+			}
+
+			if ($filedata = $this->migrationNodeFile($node)) {
+				file_put_contents($filename, $filedata);
+				echo ($filename) . "<br>";
+			}
 		}
 
+		// model removed properties
+		// ?
 	}
 
 	private function writeEdges() {
 		$froms = [];
+		$made = array_keys((array) $this->build->scafold->scafolds->made);
 		foreach ($this->build->schema->edges as $edge) {
 
 			$startnode = $this->schema[$edge->startpoint];
@@ -114,19 +124,25 @@ class Scafolding {
 			$s_name = str_singular(str_name($this->schema[$startnode->suid]->name));
 			$e_name = str_singular(str_name($this->schema[$endnode->suid]->name));
 
-			$froms[$nuid]['edge'] = $edge;
-			$froms[$nuid]['props'][$s_name] = $this->prop_suid($s_name . '_id');
-			$froms[$nuid]['props'][$e_name] = $this->prop_suid($e_name . '_id');
+			$name = strtolower($startnode->suid) . '.' . $s_name . '-' . strtolower($endnode->suid) . '.' . $e_name;
+
+			if (!in_array($name, $made)) {
+				$froms[$nuid]['edge'] = $edge;
+				$froms[$nuid]['props'][$s_name] = $this->prop_suid($s_name . '_id');
+				$froms[$nuid]['props'][$e_name] = $this->prop_suid($e_name . '_id');
+				$this->build->scafold->scafolds->made->$name = 'edge';
+			}
 		}
 
-		foreach ($froms as $key => $from) {
-			$filename = $this->migrationPath($this->migrationNameForEdge($from['edge']));
-			$filedata = $this->migrationEdgeFile($from['edge'], $from['props']);
-			file_put_contents($filename, $filedata);
-			//
-			$this->scafold[$key] = $from;
+		if (!empty($froms)) {
+			foreach ($froms as $key => $from) {
+				$filename = $this->migrationPath($this->migrationNameForEdge($from['edge']));
+				$filedata = $this->migrationEdgeFile($from['edge'], $from['props']);
+				file_put_contents($filename, $filedata);
+				//
+				$this->scafold[$key] = $from;
+			}
 		}
-
 	}
 
 	private function writeConfig() {

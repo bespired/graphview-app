@@ -3,11 +3,12 @@
 namespace App\Traits;
 
 /*
-Graphview generated trait file.
-Made from graphview suid : {{ suid }}, name : {{ name }}
+	Graphview generated trait file.
+	Made from graphview suid : {{ suid }}, name : {{ name }}
+	Don't manual change this file, alterations can be made with scafold.
  */
 
-trait {{ modelname }} {
+trait {{ modelname }}Trait {
 
 {{ relations }}
 

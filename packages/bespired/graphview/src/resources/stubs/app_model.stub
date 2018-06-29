@@ -3,8 +3,9 @@
 namespace App\Models;
 
 /*
-Graphview generated model file.
-Made from graphview suid : {{ suid }}, name : {{ name }}
+	Graphview generated model file.
+	Made from graphview suid : {{ suid }}, name : {{ name }}
+	You are free to adjust this file, alterations are made in the trait
  */
 
 use App\Traits\HasShortUuid;

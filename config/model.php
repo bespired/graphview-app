@@ -1,11 +1,17 @@
 <?php
 return [
+	'with-all' => 
+	  [
+		'person' => 'companies,addresses,qualifiers,tags,notes',
+		'company' => 'addresses',
+		'visitor' => 'qualifiers,people',
+		],
 	'nodes' => 
 	  [
 		'visitor' => 'visitors',
 		'visitors' => 'visitor',
-		'person' => 'persons',
-		'persons' => 'person',
+		'person' => 'people',
+		'people' => 'person',
 		'company' => 'companies',
 		'companies' => 'company',
 		'tag' => 'tags',

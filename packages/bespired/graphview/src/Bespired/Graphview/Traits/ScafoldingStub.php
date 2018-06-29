@@ -14,7 +14,40 @@ trait ScafoldingStub {
 		return $this->stubs[$type];
 	}
 
+	private function migrationNodeRename($data) {
+		$names = $this->build->scafold->scafolds->names;
+
+		$oldName = str_name($names->{$data->suid});
+		$newName = str_name($data->name);
+
+		if ($oldName == $newName) {
+			return null;
+		}
+
+		$oldEdgeName = 'edge_' . str_name(str_singular($oldName));
+		$newEdgeName = 'edge_' . str_name(str_singular($newName));
+
+		$replacers = [
+			'connection' => $this->build->connection,
+			'suid' => $data->suid,
+			'name' => $data->name,
+			'migratename' => $this->migrateNodeName($data, 'class'),
+			'oldname' => $oldName,
+			'newname' => $newName,
+			'oldedgename' => $oldEdgeName,
+			'newedgename' => $newEdgeName,
+		];
+
+		return $this->tableFiller('rename_node', $replacers);
+	}
+
 	private function migrationNodeFile($data) {
+
+		$properties = $this->properties($data);
+
+		if (empty($properties)) {
+			return null;
+		}
 
 		$replacers = [
 			'connection' => $this->build->connection,
@@ -22,10 +55,11 @@ trait ScafoldingStub {
 			'name' => $data->name,
 			'migratename' => $this->migrateNodeName($data, 'class'),
 			'tablename' => $this->migrateNodeName($data, 'table'),
-			'properties' => $this->properties($data),
+			'properties' => $properties,
 		];
 
-		return $this->tableFiller('create_node', $replacers);
+		$stubname = $data->migrate_type == 'create' ? 'create_node' : 'alter_node';
+		return $this->tableFiller($stubname, $replacers);
 
 	}
 
@@ -40,13 +74,35 @@ trait ScafoldingStub {
 			'properties' => join("\n", $props),
 		];
 
-		return $this->tableFiller('create_edge', $replacers);
+		$migrate_type = $this->schema[$edge->startpoint]->migrate_type;
+		$stubname = $migrate_type == 'create' ? 'create_edge' : 'alter_edge';
+		return $this->tableFiller($stubname, $replacers);
 
 	}
 
 	private function scafoldConfigFile() {
+		$config['with-all'] = [];
 		$config['nodes'] = [];
 		$config['keys'] = [];
+
+		$nodes = collect($this->build->schema->nodes)->keyBy('suid');
+		//	dd($this->build->schema->edges);
+
+		foreach ($this->build->schema->edges as $edge) {
+			$startnode = $nodes[$edge->startpoint];
+			$endnode = $nodes[$edge->endpoint];
+
+			$startname = str_name(str_singular($startnode->name));
+			$endname = str_name($endnode->name);
+
+			$config['with-all'][$startname][$endname] = $endname;
+		}
+
+		foreach ($config['with-all'] as $key => $keys) {
+			$withAll[$key] = join(',', array_values($keys));
+		}
+
+		$config['with-all'] = $withAll;
 
 		foreach ($this->build->schema->nodes as $node) {
 			$name = str_name($node->name);
@@ -134,7 +190,8 @@ trait ScafoldingStub {
 
 	private function tableFiller($type, $replacers = []) {
 
-		$defaults = ['suid', 'name', 'migratename', 'tablename', 'connection', 'properties'];
+		$defaults = ['suid', 'name', 'migratename', 'connection', 'properties',
+			'tablename', 'oldname', 'newname', 'oldedgename', 'newedgename'];
 
 		$migrate_table = $this->migrationStub($type);
 		foreach ($defaults as $key) {
@@ -164,21 +221,24 @@ trait ScafoldingStub {
 		return str_replace('{{ routes }}', join("\n", $routes), $this->routeStub());
 	}
 
-	private function prop_key($name) {
-		return "\t\t\t\t\t" . "\$table->string('$name')->index()->default('');";
+	private function prop_key($name, $after = '') {
+		$order = empty($after) ? '' : "->after('$after')";
+		return "\t\t\t\t\t" . "\$table->string('$name')->index()->default('')$order;";
 	}
 
-	private function prop_string($name) {
-		return "\t\t\t\t\t" . "\$table->string('$name')->nullable();";
+	private function prop_string($name, $after = '') {
+		$order = empty($after) ? '' : "->after('$after')";
+		return "\t\t\t\t\t" . "\$table->string('$name')->nullable()$order;";
 	}
 
-	private function prop_suid($name) {
-		return "\t\t\t\t\t" . "\$table->char('$name', 40)->nullable();";
+	private function prop_suid($name, $after = '') {
+		$order = empty($after) ? '' : "->after('$after')";
+		return "\t\t\t\t\t" . "\$table->char('$name', 40)->nullable()$order;";
 	}
 
 	private function model_prop($current, $relation) {
 		$stub = [];
-		$belong = sprintf("->belongsToMany(%s::class, 'edge_%s', '%s_id', '%s_id')",
+		$belong = sprintf("->belongsToMany(\App\Models\%s::class, 'edge_%s', '%s_id', '%s_id')",
 			ucFirst(camel_case(str_name($relation))), $current, $current, $relation);
 
 		$stub[] = sprintf("\tpublic function %s() {", str_plural($relation));
@@ -191,17 +251,30 @@ trait ScafoldingStub {
 	}
 
 	private function properties($node) {
+		$made = array_keys((array) $this->build->scafold->scafolds->made);
+		$after = $node->migrate_type == 'create' ? '' : 'tag';
 		$props = [];
+
 		if (isset($node->props->keys)) {
 			foreach ($node->props->keys as $key => $type) {
-				$props[] = $this->prop_key($key);
+				$name = $this->scafoldingName($node, $key);
+				if (!in_array($name, $made)) {
+					$props[] = $this->prop_key($key, $after);
+					$this->build->scafold->scafolds->made->$name = 'key';
+				}
 			}
 		}
+
 		if (isset($node->props->strings)) {
 			foreach ($node->props->strings as $string => $type) {
-				$props[] = $this->prop_string($string);
+				$name = $this->scafoldingName($node, $string);
+				if (!in_array($name, $made)) {
+					$props[] = $this->prop_string($string, $after);
+					$this->build->scafold->scafolds->made->$name = 'string';
+				}
 			}
 		}
+
 		return join("\n", $props);
 	}
 }

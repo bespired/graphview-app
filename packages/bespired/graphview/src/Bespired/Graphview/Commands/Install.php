@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 
 class Install extends Command {
 
-	protected $signature = 'install:graph:fresh';
+	protected $signature = 'graphview:install:fresh';
 
 	protected $description = 'Creates setup for GraphView';
 
@@ -28,6 +28,8 @@ class Install extends Command {
 
 		// $this->checkEnv();
 
+		$this->removeOldFiles();
+
 		$this->removeOldDb();
 
 		$this->createNewDb();
@@ -46,6 +48,27 @@ class Install extends Command {
 		$this->line(sprintf('<fg=red>%s</>', $text));
 	}
 
+	private function removeOldFiles() {
+
+		$this->removeGraphFiles(database_path('migrations'), 'generated migration file.');
+		$this->removeGraphFiles(app_path('Traits'), 'generated trait file.');
+		$this->removeGraphFiles(app_path('Models'), 'generated model file.');
+
+	}
+
+	private function removeGraphFiles($where, $what) {
+		$pattern = $where . '/*.php';
+		foreach (glob($pattern) as $filename) {
+			$file = file_get_contents($filename);
+			if (strpos($file, $what) !== false) {
+				unlink($filename);
+				$removed = true;
+			}
+		}
+		if (isset($removed)) {
+			$this->info('Removed ' . $what);
+		}
+	}
 	private function removeOldDb() {
 
 		if (file_exists(config('database.connections.graphview.database'))) {
@@ -101,7 +124,9 @@ class Install extends Command {
 		$model->schema = config('bespired.graphview.demo');
 		$model->save();
 
-		$this->info(sprintf('Demo Graph created on connection %s.', $model->connection));
+		$scafold = \Bespired\Graphview\Models\Scafold::where('belongs_to', 'demo')->delete();
+
+		$this->info(sprintf('Demo Graph created.'));
 	}
 
 }

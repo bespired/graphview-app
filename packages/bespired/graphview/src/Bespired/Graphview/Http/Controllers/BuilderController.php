@@ -91,7 +91,7 @@ class BuilderController extends Controller {
 	public function scafold(Building $suid) {
 
 		$scafold = new Scafolding();
-		$scafold->migrates($suid->with(['evolution', 'scafold'])->first());
+		$scafold->migrates($suid->with(['scafold'])->first());
 
 	}
 

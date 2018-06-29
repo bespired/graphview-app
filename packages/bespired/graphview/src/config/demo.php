@@ -93,7 +93,7 @@ return [
 			],
 		], [
 			'suid' => 'Na',
-			'name' => 'Adresses',
+			'name' => 'Addresses',
 			'type' => 'multiple-public',
 			'draw' => [
 				'top' => 120 + 160, 'left' => 640,

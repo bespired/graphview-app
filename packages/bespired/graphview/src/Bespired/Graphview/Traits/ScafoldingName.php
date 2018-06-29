@@ -12,8 +12,9 @@ trait ScafoldingName {
 		// alter names need something extra because
 		// migrations cant have double classnames
 
-		$tf_type = isset($type) ? $type : ($inc == 1 ? 'create' : 'alter');
+		$tf_type = isset($type) ? $type : ($inc == 1 ? 'create' : 'alter_' . $this->number($inc));
 		$tf_name = str_name(str_singular($node->name));
+		$node->migrate_type = $tf_type;
 
 		return sprintf("2018_01_%02d_%06d_%s_%s_table.php", $tid, $inc, $tf_type, $tf_name);
 
@@ -26,7 +27,7 @@ trait ScafoldingName {
 		$tid = $this->idBySuid($startnode->suid);
 		$inc = $this->incBySuid($startnode->suid);
 
-		$tf_type = 'edge';
+		$tf_type = $startnode->migrate_type . '_edge';
 		$s_name = str_singular(str_name($this->schema[$startnode->suid]->name));
 
 		return sprintf("2018_01_%02d_%06d_%s_%s_table.php", $tid, $inc, $tf_type, $s_name);
@@ -66,7 +67,7 @@ trait ScafoldingName {
 
 	private function migrateNodeName($node, $type) {
 
-		$name = 'create_' . str_name(str_singular($node->name)) . '_table';
+		$name = $node->migrate_type . '_' . str_name(str_singular($node->name)) . '_table';
 
 		if ($type == 'class') {
 			return ucFirst(camel_case($name));
@@ -82,13 +83,17 @@ trait ScafoldingName {
 		$s_name = str_singular(str_name($this->schema[$startnode->suid]->name));
 
 		if ($type == 'class') {
-			$name = 'edge_' . $s_name . '_table';
+			$name = $startnode->migrate_type . '_edge_' . $s_name . '_table';
 			return ucFirst(camel_case($name));
 		}
 
 		$name = 'edge_' . $s_name;
 		return $name;
 
+	}
+
+	private function scafoldingName($data, $propname) {
+		return strtolower($data->suid) . '.' . $propname;
 	}
 
 	private function stubsPath($name) {
@@ -115,6 +120,24 @@ trait ScafoldingName {
 
 		return $this->getStub('routes', $this->stubsPath('route.stub'));
 
+	}
+
+	private function number($number) {
+		$numbers = [
+			'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+			'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+			'eightteen', 'nineteen', 'twenty',
+		];
+		$decimals = [
+			'', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+		];
+		$centimals = [
+			'zero', 'ten', 'twenty', 'thirty', 'fourty', 'fifty', 'sixty', 'zeventy', 'eighty', 'ninety',
+		];
+		if ($number < 21) {
+			return $numbers[$number];
+		}
+		return $centimals[floor($number / 10)] . $decimals[$number % 10];
 	}
 
 }

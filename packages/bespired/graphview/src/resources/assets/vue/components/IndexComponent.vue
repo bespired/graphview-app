@@ -7,9 +7,9 @@
             <tr v-for="(row, idx) in index" @click="graph(row.suid)">
                 <td>{{ row.name }}</td>
                 <td class="action">
-                    <a class="button right" @click.stop="dump(row)">Export</a>
-                    <a class="button right" @click.stop="scafold(row)">Scafold</a>
-                    <a class="button right" @click.stop="remove(row.suid)">Delete</a>
+                    <a class="button right" @click.stop="dump(row)">Export <i class="icon-export"/></a>
+                    <a class="button right" @click.stop="scafold(row)">Scafold <i class="icon-rocket"/></a>
+                    <a class="button right" @click.stop="remove(row.suid)">Delete <i class="icon-trash"/></a>
                 </td>
             </tr>
             <tr>

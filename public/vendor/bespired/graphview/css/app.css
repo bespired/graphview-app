@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 sub,
 sup {
   font-size: 75%;
@@ -283,6 +285,495 @@ template {
   border-bottom: 1px solid white;
 }
 
+@font-face {
+  font-family: 'graph';
+  src: url("/vendor/bespired/graphview/fonts/graph/graph.woff");
+  src: url("/vendor/bespired/graphview/fonts/graph/graph.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "graph";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  opacity: .8;
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+  /* you can be more comfortable with increased icons size */
+  font-size: 80%;
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transform: translateY(-1px);
+          transform: translateY(-1px);
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.icon-cog:before {
+  content: '\E800';
+}
+
+/* '' */
+
+.icon-down-open:before {
+  content: '\E801';
+}
+
+/* '' */
+
+.icon-left-open:before {
+  content: '\E802';
+}
+
+/* '' */
+
+.icon-right-open:before {
+  content: '\E803';
+}
+
+/* '' */
+
+.icon-up-open:before {
+  content: '\E804';
+}
+
+/* '' */
+
+.icon-users:before {
+  content: '\E805';
+}
+
+/* '' */
+
+.icon-user:before {
+  content: '\E806';
+}
+
+/* '' */
+
+.icon-tag:before {
+  content: '\E807';
+}
+
+/* '' */
+
+.icon-key:before {
+  content: '\E808';
+}
+
+/* '' */
+
+.icon-heart:before {
+  content: '\E809';
+}
+
+/* '' */
+
+.icon-cancel-circle:before {
+  content: '\E80A';
+}
+
+/* '' */
+
+.icon-search:before {
+  content: '\E80B';
+}
+
+/* '' */
+
+.icon-cancel-x:before {
+  content: '\E80C';
+}
+
+/* '' */
+
+.icon-ok:before {
+  content: '\E80D';
+}
+
+/* '' */
+
+.icon-plus:before {
+  content: '\E80E';
+}
+
+/* '' */
+
+.icon-tag-fa:before {
+  content: '\E80F';
+}
+
+/* '' */
+
+.icon-pencil-alt:before {
+  content: '\E810';
+}
+
+/* '' */
+
+.icon-attention:before {
+  content: '\E811';
+}
+
+/* '' */
+
+.icon-trash-1:before {
+  content: '\E812';
+}
+
+/* '' */
+
+.icon-wrench:before {
+  content: '\E813';
+}
+
+/* '' */
+
+.icon-zoom-in:before {
+  content: '\E814';
+}
+
+/* '' */
+
+.icon-zoom-out:before {
+  content: '\E815';
+}
+
+/* '' */
+
+.icon-down-dir:before {
+  content: '\E816';
+}
+
+/* '' */
+
+.icon-left-dir:before {
+  content: '\E817';
+}
+
+/* '' */
+
+.icon-right-dir:before {
+  content: '\E818';
+}
+
+/* '' */
+
+.icon-up-dir:before {
+  content: '\E819';
+}
+
+/* '' */
+
+.icon-cw:before {
+  content: '\E81A';
+}
+
+/* '' */
+
+.icon-globe:before {
+  content: '\E81B';
+}
+
+/* '' */
+
+.icon-key-fa:before {
+  content: '\E81C';
+}
+
+/* '' */
+
+.icon-ok-circled:before {
+  content: '\E81D';
+}
+
+/* '' */
+
+.icon-cancel:before {
+  content: '\E81E';
+}
+
+/* '' */
+
+.icon-cancel-circled:before {
+  content: '\E81F';
+}
+
+/* '' */
+
+.icon-plus-circled:before {
+  content: '\E820';
+}
+
+/* '' */
+
+.icon-tag-solid:before {
+  content: '\E821';
+}
+
+/* '' */
+
+.icon-publish:before {
+  content: '\E822';
+}
+
+/* '' */
+
+.icon-export:before {
+  content: '\E823';
+}
+
+/* '' */
+
+.icon-lock:before {
+  content: '\E825';
+}
+
+/* '' */
+
+.icon-diamond:before {
+  content: '\E826';
+}
+
+/* '' */
+
+.icon-clock:before {
+  content: '\E827';
+}
+
+/* '' */
+
+.icon-pencil:before {
+  content: '\E828';
+}
+
+/* '' */
+
+.icon-window:before {
+  content: '\E829';
+}
+
+/* '' */
+
+.icon-asterisk:before {
+  content: '\E82A';
+}
+
+/* '' */
+
+.icon-town-hall:before {
+  content: '\E83C';
+}
+
+/* '' */
+
+.icon-trash-solid:before {
+  content: '\E83D';
+}
+
+/* '' */
+
+.icon-math:before {
+  content: '\F01A';
+}
+
+/* '' */
+
+.icon-string:before {
+  content: '\F088';
+}
+
+/* '' */
+
+.icon-left-circled:before {
+  content: '\F0A8';
+}
+
+/* '' */
+
+.icon-right-circled:before {
+  content: '\F0A9';
+}
+
+/* '' */
+
+.icon-up-circled:before {
+  content: '\F0AA';
+}
+
+/* '' */
+
+.icon-down-circled:before {
+  content: '\F0AB';
+}
+
+/* '' */
+
+.icon-building:before {
+  content: '\F0F7';
+}
+
+/* '' */
+
+.icon-hospital:before {
+  content: '\F0F8';
+}
+
+/* '' */
+
+.icon-plus-squared:before {
+  content: '\F0FE';
+}
+
+/* '' */
+
+.icon-flag:before {
+  content: '\F11D';
+}
+
+/* '' */
+
+.icon-terminal:before {
+  content: '\F120';
+}
+
+/* '' */
+
+.icon-rocket:before {
+  content: '\F135';
+}
+
+/* '' */
+
+.icon-bullseye:before {
+  content: '\F140';
+}
+
+/* '' */
+
+.icon-minus-squared:before {
+  content: '\F146';
+}
+
+/* '' */
+
+.icon-minus-squared-alt:before {
+  content: '\F147';
+}
+
+/* '' */
+
+.icon-ok-squared:before {
+  content: '\F14A';
+}
+
+/* '' */
+
+.icon-sun:before {
+  content: '\F185';
+}
+
+/* '' */
+
+.icon-dot-circled:before {
+  content: '\F192';
+}
+
+/* '' */
+
+.icon-paper-plane-empty:before {
+  content: '\F1D9';
+}
+
+/* '' */
+
+.icon-circle-thin:before {
+  content: '\F1DB';
+}
+
+/* '' */
+
+.icon-trash:before {
+  content: '\F1F8';
+}
+
+/* '' */
+
+.icon-toggle-off:before {
+  content: '\F204';
+}
+
+/* '' */
+
+.icon-toggle-on:before {
+  content: '\F205';
+}
+
+/* '' */
+
+.icon-map-pin:before {
+  content: '\F276';
+}
+
+/* '' */
+
+.icon-handshake-o:before {
+  content: '\F2B5';
+}
+
+/* '' */
+
+.icon-address-book-o:before {
+  content: '\F2BA';
+}
+
+/* '' */
+
+.icon-address-card:before {
+  content: '\F2BC';
+}
+
+/* '' */
+
+.icon-user-circle:before {
+  content: '\F2BE';
+}
+
+/* '' */
+
+.icon-id-card:before {
+  content: '\F2C3';
+}
+
+/* '' */
+
+.icon-telegram:before {
+  content: '\F2C6';
+}
+
+/* '' */
+
+.icon-window-minimize:before {
+  content: '\F2D1';
+}
+
+/* '' */
+
 .button {
   padding: 4px 8px;
   border: 1px solid;
@@ -379,6 +870,47 @@ template {
 
 .right-sidebar input:focus {
   background-color: #e5f2ef;
+}
+
+.right-sidebar .create input {
+  width: 77%;
+  font-size: 1em;
+  margin-left: -6px;
+  margin-top: -4px;
+  padding: 1px 4px;
+}
+
+.right-sidebar .prop,
+.right-sidebar .key,
+.right-sidebar .create {
+  padding: 2px 8px;
+}
+
+.right-sidebar .icon {
+  margin: 0 -1px;
+}
+
+.right-sidebar .icon:hover {
+  background-color: #c4e0da;
+}
+
+.right-sidebar .icon.right {
+  float: right;
+  visibility: hidden;
+}
+
+.right-sidebar .prop:hover .icon,
+.right-sidebar .key:hover .icon {
+  border: 1px solid #8BC34A;
+  visibility: visible;
+}
+
+.right-sidebar .create i,
+.right-sidebar .icon {
+  margin: 0 -1px;
+  cursor: pointer;
+  border: 1px solid white;
+  border-radius: 4px;
 }
 
 .header {
@@ -673,10 +1205,5 @@ template {
 
 .three .edge-out-dir {
   stroke-dasharray: 5 5 10;
-}
-
-.prop,
-.key {
-  padding: 2px 8px;
 }
 
